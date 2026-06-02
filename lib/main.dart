@@ -184,34 +184,98 @@ class HomeContent {
     bannerTitle: 'JUST FOR you',
     bannerSubtitle: '30% OFF',
     categories: [
-      CategoryItem('Beauty', Icons.brush),
-      CategoryItem('Offers', Icons.local_offer),
-      CategoryItem('Fashion', Icons.checkroom),
-      CategoryItem('Home', Icons.chair),
-      CategoryItem('Shirt', Icons.dry_cleaning),
-      CategoryItem('Woman Bag', Icons.shopping_bag),
-      CategoryItem('Dress', Icons.woman),
-      CategoryItem('Mobiles', Icons.phone_iphone),
+      CategoryItem(
+        'Beauty',
+        Icons.brush,
+        imagePath: 'assets/images/categories/beauty.png',
+      ),
+      CategoryItem(
+        'Offers',
+        Icons.local_offer,
+        imagePath: 'assets/images/categories/offers.png',
+      ),
+      CategoryItem(
+        'Fashion',
+        Icons.checkroom,
+        imagePath: 'assets/images/categories/fashion.png',
+      ),
+      CategoryItem(
+        'Home',
+        Icons.chair,
+        imagePath: 'assets/images/categories/home.png',
+      ),
+      CategoryItem(
+        'Shirt',
+        Icons.dry_cleaning,
+        imagePath: 'assets/images/categories/shirt.png',
+      ),
+      CategoryItem(
+        'Woman Bag',
+        Icons.shopping_bag,
+        imagePath: 'assets/images/categories/woman_bag.png',
+      ),
+      CategoryItem(
+        'Dress',
+        Icons.woman,
+        imagePath: 'assets/images/categories/dress.png',
+      ),
+      CategoryItem(
+        'Mobiles',
+        Icons.phone_iphone,
+        imagePath: 'assets/images/categories/mobiles.png',
+      ),
     ],
     products: [
-      ProductItem('Multi Kit', 500, 4.6, 86, Icons.spa),
-      ProductItem('Lipstick', 400, 4.6, 86, Icons.colorize),
-      ProductItem('Skin Care', 650, 4.8, 52, Icons.face),
-      ProductItem('Hand Bag', 900, 4.4, 41, Icons.shopping_bag),
+      ProductItem(
+        'Multi Kit',
+        500,
+        4.6,
+        86,
+        Icons.spa,
+        imagePath: 'assets/images/products/multi_kit.png',
+        cardImagePath: 'assets/images/products/multi_kit.png',
+      ),
+      ProductItem(
+        'Lipstick',
+        400,
+        4.6,
+        86,
+        Icons.colorize,
+        imagePath: 'assets/images/products/lipstick.png',
+        cardImagePath: 'assets/images/products/lipstick.png',
+      ),
+      ProductItem(
+        'Skin Care',
+        650,
+        4.8,
+        52,
+        Icons.face,
+        imagePath: 'assets/images/products/skin_care.png',
+      ),
+      ProductItem(
+        'Hand Bag',
+        900,
+        4.4,
+        41,
+        Icons.shopping_bag,
+        imagePath: 'assets/images/products/hand_bag.png',
+      ),
     ],
   );
 }
 
 class CategoryItem {
-  const CategoryItem(this.name, this.icon);
+  const CategoryItem(this.name, this.icon, {this.imagePath});
 
   final String name;
   final IconData icon;
+  final String? imagePath;
 
   factory CategoryItem.fromMap(Map<String, dynamic> data) {
     return CategoryItem(
       data['name'] as String? ?? 'Category',
       _iconFor(data['icon'] as String?),
+      imagePath: data['imagePath'] as String?,
     );
   }
 }
@@ -222,14 +286,18 @@ class ProductItem {
     this.price,
     this.rating,
     this.reviews,
-    this.icon,
-  );
+    this.icon, {
+    this.imagePath,
+    this.cardImagePath,
+  });
 
   final String name;
   final num price;
   final num rating;
   final int reviews;
   final IconData icon;
+  final String? imagePath;
+  final String? cardImagePath;
 
   factory ProductItem.fromMap(Map<String, dynamic> data) {
     return ProductItem(
@@ -238,6 +306,8 @@ class ProductItem {
       data['rating'] as num? ?? 4.6,
       data['reviews'] as int? ?? 0,
       _iconFor(data['icon'] as String?),
+      imagePath: data['imagePath'] as String?,
+      cardImagePath: data['cardImagePath'] as String?,
     );
   }
 }
@@ -503,6 +573,10 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.prefixText,
+    this.borderRadius,
+    this.hintFontSize,
+    this.iconSize,
+    this.contentPadding,
   });
 
   final TextEditingController controller;
@@ -511,6 +585,10 @@ class AppTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final String? prefixText;
+  final double? borderRadius;
+  final double? hintFontSize;
+  final double? iconSize;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -518,34 +596,53 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
-      decoration: _inputDecoration().copyWith(
-        hintText: hint,
-        prefixIcon: Icon(icon, size: 18, color: const Color(0xFFCFD3DD)),
-        prefixText: prefixText,
-        suffixIcon: obscureText
-            ? const Icon(
-                Icons.visibility_off_outlined,
-                size: 18,
-                color: Color(0xFFCFD3DD),
-              )
-            : null,
-      ),
+      decoration:
+          _inputDecoration(
+            borderRadius: borderRadius,
+            hintFontSize: hintFontSize,
+            contentPadding: contentPadding,
+          ).copyWith(
+            hintText: hint,
+            prefixIcon: Icon(
+              icon,
+              size: iconSize ?? 18,
+              color: const Color(0xFFCFD3DD),
+            ),
+            prefixText: prefixText,
+            suffixIcon: obscureText
+                ? const Icon(
+                    Icons.visibility_off_outlined,
+                    size: 18,
+                    color: Color(0xFFCFD3DD),
+                  )
+                : null,
+          ),
     );
   }
 }
 
-InputDecoration _inputDecoration() {
+InputDecoration _inputDecoration({
+  double? borderRadius,
+  double? hintFontSize,
+  EdgeInsetsGeometry? contentPadding,
+}) {
+  final radius = BorderRadius.circular(borderRadius ?? 14);
   return InputDecoration(
     filled: true,
     fillColor: Colors.white,
-    hintStyle: const TextStyle(color: Color(0xFFC7C9D1), fontSize: 14),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+    hintStyle: TextStyle(
+      color: const Color(0xFFC7C9D1),
+      fontSize: hintFontSize ?? 14,
+    ),
+    contentPadding:
+        contentPadding ??
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: radius,
       borderSide: const BorderSide(color: _line),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: radius,
       borderSide: const BorderSide(color: _teal, width: 1.4),
     ),
   );
@@ -556,10 +653,14 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.borderColor,
+    this.borderWidth = 0,
   });
 
   final String label;
   final VoidCallback? onPressed;
+  final Color? borderColor;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -573,6 +674,9 @@ class PrimaryButton extends StatelessWidget {
           disabledBackgroundColor: _teal.withValues(alpha: .55),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
+            side: borderWidth > 0
+                ? BorderSide(color: borderColor ?? _teal, width: borderWidth)
+                : BorderSide.none,
           ),
         ),
         child: Text(
@@ -639,6 +743,10 @@ class SocialButton extends StatelessWidget {
     this.assetPath,
     this.onPressed,
     this.isEnabled = true,
+    this.width = 92,
+    this.height = 58,
+    this.logoSize = 22,
+    this.labelFontSize = 11,
   });
 
   final String icon;
@@ -646,15 +754,22 @@ class SocialButton extends StatelessWidget {
   final String? assetPath;
   final VoidCallback? onPressed;
   final bool isEnabled;
+  final double width;
+  final double height;
+  final double logoSize;
+  final double labelFontSize;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 92,
-      height: 58,
+      width: width,
+      height: height,
       child: OutlinedButton(
         onPressed: isEnabled ? onPressed ?? () {} : null,
         style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           side: const BorderSide(color: _line),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -666,8 +781,16 @@ class SocialButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _SocialLogo(icon: icon, assetPath: assetPath),
-            Text(label, style: const TextStyle(color: _ink, fontSize: 11)),
+            _SocialLogo(icon: icon, assetPath: assetPath, size: logoSize),
+            const SizedBox(height: 6),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                maxLines: 1,
+                style: TextStyle(color: _ink, fontSize: labelFontSize),
+              ),
+            ),
           ],
         ),
       ),
@@ -676,10 +799,15 @@ class SocialButton extends StatelessWidget {
 }
 
 class _SocialLogo extends StatelessWidget {
-  const _SocialLogo({required this.icon, required this.assetPath});
+  const _SocialLogo({
+    required this.icon,
+    required this.assetPath,
+    required this.size,
+  });
 
   final String icon;
   final String? assetPath;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -687,33 +815,91 @@ class _SocialLogo extends StatelessWidget {
     if (path != null) {
       return Image.asset(
         path,
-        width: 22,
-        height: 22,
+        width: size,
+        height: size,
         fit: BoxFit.contain,
-        errorBuilder: (_, _, _) => _TextSocialLogo(icon),
+        errorBuilder: (_, _, _) => _FallbackSocialLogo(icon: icon, size: size),
       );
     }
 
-    return _TextSocialLogo(icon);
+    return _FallbackSocialLogo(icon: icon, size: size);
   }
 }
 
-class _TextSocialLogo extends StatelessWidget {
-  const _TextSocialLogo(this.icon);
+class _FallbackSocialLogo extends StatelessWidget {
+  const _FallbackSocialLogo({required this.icon, required this.size});
 
   final String icon;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      icon,
-      style: TextStyle(
-        color: icon == 'f' ? const Color(0xFF1877F2) : Colors.black,
-        fontSize: 20,
-        fontWeight: FontWeight.w900,
-      ),
+    if (icon == 'f') {
+      return Container(
+        width: size,
+        height: size,
+        decoration: const BoxDecoration(
+          color: Color(0xFF1877F2),
+          shape: BoxShape.circle,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'f',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: size * .82,
+            fontWeight: FontWeight.w900,
+            height: .95,
+          ),
+        ),
+      );
+    }
+
+    return CustomPaint(size: Size.square(size), painter: _GoogleLogoPainter());
+  }
+}
+
+class _GoogleLogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strokeWidth = size.width * .18;
+    final rect = Offset.zero & size;
+    final arcRect = rect.deflate(strokeWidth / 2);
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.square;
+
+    paint.color = const Color(0xFF4285F4);
+    canvas.drawArc(arcRect, -.08, 1.42, false, paint);
+
+    paint.color = const Color(0xFF34A853);
+    canvas.drawArc(arcRect, 1.34, 1.44, false, paint);
+
+    paint.color = const Color(0xFFFBBC05);
+    canvas.drawArc(arcRect, 2.78, 1.22, false, paint);
+
+    paint.color = const Color(0xFFEA4335);
+    canvas.drawArc(arcRect, 4.0, 1.55, false, paint);
+
+    final linePaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.square;
+    canvas.drawLine(
+      Offset(size.width * .54, size.height * .50),
+      Offset(size.width * .95, size.height * .50),
+      linePaint,
+    );
+    canvas.drawLine(
+      Offset(size.width * .95, size.height * .50),
+      Offset(size.width * .95, size.height * .66),
+      linePaint,
     );
   }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class PromoBanner extends StatelessWidget {
@@ -852,7 +1038,12 @@ class ShortcutTile extends StatelessWidget {
               border: Border.all(color: const Color(0xFFFFE9B7)),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(item.icon, color: _orange, size: 24),
+            child: _AssetOrIcon(
+              imagePath: item.imagePath,
+              icon: item.icon,
+              iconSize: 24,
+              imagePadding: 7,
+            ),
           ),
         ),
         const SizedBox(height: 8),
@@ -867,8 +1058,59 @@ class ShortcutTile extends StatelessWidget {
   }
 }
 
+class _AssetOrIcon extends StatelessWidget {
+  const _AssetOrIcon({
+    required this.imagePath,
+    required this.icon,
+    required this.iconSize,
+    required this.imagePadding,
+  });
+
+  final String? imagePath;
+  final IconData icon;
+  final double iconSize;
+  final double imagePadding;
+
+  @override
+  Widget build(BuildContext context) {
+    final path = imagePath;
+    if (path != null && path.isNotEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(imagePadding),
+        child: Image.asset(
+          path,
+          fit: BoxFit.contain,
+          errorBuilder: (_, _, _) => Icon(icon, color: _orange, size: iconSize),
+        ),
+      );
+    }
+
+    return Icon(icon, color: _orange, size: iconSize);
+  }
+}
+
 class ProductCard extends StatelessWidget {
   const ProductCard(this.item, {super.key});
+
+  final ProductItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final cardImagePath = item.cardImagePath;
+    if (cardImagePath != null && cardImagePath.isNotEmpty) {
+      return Image.asset(
+        cardImagePath,
+        fit: BoxFit.contain,
+        errorBuilder: (_, _, _) => _GeneratedProductCard(item),
+      );
+    }
+
+    return _GeneratedProductCard(item);
+  }
+}
+
+class _GeneratedProductCard extends StatelessWidget {
+  const _GeneratedProductCard(this.item);
 
   final ProductItem item;
 
@@ -903,7 +1145,14 @@ class ProductCard extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: Center(child: Icon(item.icon, color: _orange, size: 78)),
+              child: Center(
+                child: _AssetOrIcon(
+                  imagePath: item.imagePath,
+                  icon: item.icon,
+                  iconSize: 78,
+                  imagePadding: 0,
+                ),
+              ),
             ),
             Text(
               item.name,

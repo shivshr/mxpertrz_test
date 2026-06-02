@@ -101,9 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final isCompact = constraints.maxHeight < 760;
             return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: SizedBox(
+                height: constraints.maxHeight,
                 child: Stack(
                   children: [
                     Positioned(
@@ -162,39 +163,51 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: Column(
                           children: [
-                            const SizedBox(height: 52),
-                            const BrandLogo(size: 118),
-                            const SizedBox(height: 56),
+                            SizedBox(height: isCompact ? 46 : 58),
+                            BrandLogo(size: isCompact ? 122 : 140),
+                            SizedBox(height: isCompact ? 42 : 54),
                             const Text(
                               'Welcome Back!',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 28,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 20),
                             const Text(
                               'Login to continue',
-                              style: TextStyle(fontSize: 15, color: _ink),
+                              style: TextStyle(fontSize: 21, color: _ink),
                             ),
-                            const SizedBox(height: 36),
-                            AppTextField(
-                              controller: _phoneController,
-                              hint: 'Phone Number',
-                              icon: Icons.phone_android,
-                              keyboardType: TextInputType.phone,
+                            SizedBox(height: isCompact ? 34 : 44),
+                            SizedBox(
+                              height: 64,
+                              child: AppTextField(
+                                controller: _phoneController,
+                                hint: 'Phone Number',
+                                icon: Icons.phone_android,
+                                keyboardType: TextInputType.phone,
+                                borderRadius: 17,
+                                hintFontSize: 20,
+                                iconSize: 22,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 19,
+                                ),
+                              ),
                             ),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 38),
                             PrimaryButton(
                               label: _loading ? 'SENDING...' : 'GET OTP',
                               onPressed: _loading ? null : _sendOtp,
+                              borderColor: const Color(0xFF169BFF),
+                              borderWidth: 3,
                             ),
-                            const Spacer(),
+                            const Spacer(flex: 2),
                             const Text(
                               'Or Continue With',
-                              style: TextStyle(fontSize: 12, color: _ink),
+                              style: TextStyle(fontSize: 16, color: _ink),
                             ),
-                            const SizedBox(height: 22),
+                            const SizedBox(height: 34),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -206,22 +219,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                       : 'Google',
                                   isEnabled: !_googleLoading,
                                   onPressed: _signInWithGoogle,
+                                  width: 122,
+                                  height: 72,
+                                  logoSize: 26,
+                                  labelFontSize: 16,
                                 ),
-                                const SizedBox(width: 14),
+                                const SizedBox(width: 24),
                                 const SocialButton(
                                   icon: 'f',
                                   assetPath: 'assets/images/icons/facebook.png',
                                   label: 'Facebook',
+                                  width: 122,
+                                  height: 72,
+                                  logoSize: 26,
+                                  labelFontSize: 16,
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 38),
+                            const Spacer(flex: 2),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
                                   "Don't have an account? ",
-                                  style: TextStyle(color: _muted, fontSize: 12),
+                                  style: TextStyle(color: _muted, fontSize: 15),
                                 ),
                                 GestureDetector(
                                   onTap: () => Navigator.of(context).push(
@@ -233,6 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     'SIGN UP',
                                     style: TextStyle(
                                       color: _teal,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w900,
                                       decoration: TextDecoration.underline,
                                     ),
@@ -240,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 22),
+                            const SizedBox(height: 26),
                           ],
                         ),
                       ),

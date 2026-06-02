@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(child: _HomeHeader(content: content)),
-                  SliverToBoxAdapter(child: _CategoryTabs(content.categories)),
+                  const SliverToBoxAdapter(child: _CategoryTabs()),
                   SliverToBoxAdapter(child: _ShortcutGrid(content.categories)),
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(20, 14, 20, 96),
@@ -98,9 +98,7 @@ class _HomeHeader extends StatelessWidget {
 }
 
 class _CategoryTabs extends StatelessWidget {
-  const _CategoryTabs(this.categories);
-
-  final List<CategoryItem> categories;
+  const _CategoryTabs();
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +107,7 @@ class _CategoryTabs extends StatelessWidget {
       'Cell Phone',
       'Car Products',
       'Department Store',
+      'Computer',
     ];
     return SizedBox(
       height: 50,
@@ -121,7 +120,7 @@ class _CategoryTabs extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              index < categories.length ? categories[index].name : names[index],
+              names[index],
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900),
             ),
             const SizedBox(height: 8),

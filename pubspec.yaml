@@ -44,3 +44,5 @@ flutter:
     - assets/logo.png
     - assets/images/home/
     - assets/images/onboarding/
+    - assets/images/categories/
+    - assets/images/products/
