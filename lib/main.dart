@@ -61,7 +61,15 @@ class GoogleAuthService {
 
     final googleSignIn = GoogleSignIn.instance;
     if (!_initialized) {
-      await googleSignIn.initialize(serverClientId: _webClientId);
+      await googleSignIn
+          .initialize(serverClientId: _webClientId)
+          .timeout(
+            const Duration(seconds: 15),
+            onTimeout: () => throw FirebaseAuthException(
+              code: 'google-init-timeout',
+              message: 'Google Sign-In setup timed out. Please try again.',
+            ),
+          );
       _initialized = true;
     }
 
@@ -72,7 +80,13 @@ class GoogleAuthService {
       );
     }
 
-    final googleUser = await googleSignIn.authenticate();
+    final googleUser = await googleSignIn.authenticate().timeout(
+      const Duration(seconds: 60),
+      onTimeout: () => throw FirebaseAuthException(
+        code: 'google-auth-timeout',
+        message: 'Google Sign-In timed out. Please try again.',
+      ),
+    );
     final googleAuth = googleUser.authentication;
     final idToken = googleAuth.idToken;
 
@@ -84,19 +98,31 @@ class GoogleAuthService {
     }
 
     final credential = GoogleAuthProvider.credential(idToken: idToken);
-    final userCredential = await FirebaseAuth.instance.signInWithCredential(
-      credential,
-    );
+    final userCredential = await FirebaseAuth.instance
+        .signInWithCredential(credential)
+        .timeout(
+          const Duration(seconds: 30),
+          onTimeout: () => throw FirebaseAuthException(
+            code: 'firebase-google-timeout',
+            message: 'Firebase login timed out. Please try again.',
+          ),
+        );
     final user = userCredential.user;
 
     if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'email': user.email,
-        'name': user.displayName,
-        'photoUrl': user.photoURL,
-        'provider': 'google',
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      unawaited(
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .set({
+              'email': user.email,
+              'name': user.displayName,
+              'photoUrl': user.photoURL,
+              'provider': 'google',
+              'updatedAt': FieldValue.serverTimestamp(),
+            }, SetOptions(merge: true))
+            .catchError((_) {}),
+      );
     }
 
     return userCredential;
