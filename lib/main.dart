@@ -175,7 +175,10 @@ class HomeContent {
           : categoryDocs.map(CategoryItem.fromMap).toList(),
       products: productDocs.isEmpty
           ? sample.products
-          : productDocs.map(ProductItem.fromMap).toList(),
+          : productDocs
+                .map(ProductItem.fromMap)
+                .where((item) => !_hiddenProductNames.contains(item.name))
+                .toList(),
     );
   }
 
@@ -244,25 +247,11 @@ class HomeContent {
         imagePath: 'assets/images/products/lipstick.png',
         cardImagePath: 'assets/images/products/lipstick.png',
       ),
-      ProductItem(
-        'Skin Care',
-        650,
-        4.8,
-        52,
-        Icons.face,
-        imagePath: 'assets/images/products/skin_care.png',
-      ),
-      ProductItem(
-        'Hand Bag',
-        900,
-        4.4,
-        41,
-        Icons.shopping_bag,
-        imagePath: 'assets/images/products/hand_bag.png',
-      ),
     ],
   );
 }
+
+const _hiddenProductNames = {'Skin Care', 'Hand Bag'};
 
 class CategoryItem {
   const CategoryItem(this.name, this.icon, {this.imagePath});
