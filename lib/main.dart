@@ -47,6 +47,8 @@ class FirebaseBootstrap {
 }
 
 class GoogleAuthService {
+  static const _webClientId =
+      '892513363343-pfqehe25tm698q8rno3u5pdm1c4bu1bn.apps.googleusercontent.com';
   static bool _initialized = false;
 
   static Future<UserCredential> signIn() async {
@@ -59,7 +61,7 @@ class GoogleAuthService {
 
     final googleSignIn = GoogleSignIn.instance;
     if (!_initialized) {
-      await googleSignIn.initialize();
+      await googleSignIn.initialize(serverClientId: _webClientId);
       _initialized = true;
     }
 
