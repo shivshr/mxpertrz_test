@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>892513363343-uts8b4n4hdh3le8udredfgu206n0n1gr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.892513363343-uts8b4n4hdh3le8udredfgu206n0n1gr</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>892513363343-2oajquof14jb6ufnrf2u1ummrqsif7is.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC89E4C-rJFi6Po7QwjvLj26ugJ9xtZugk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>892513363343</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.mxpertzTest</string>
+	<key>PROJECT_ID</key>
+	<string>mxpertztest-da18a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mxpertztest-da18a.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:892513363343:ios:78e2282a5964d4e17697fa</string>
+</dict>
+</plist>
